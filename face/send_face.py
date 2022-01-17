@@ -1,12 +1,6 @@
-from tkinter import messagebox
 from utils.create_widget import *
-from utils.constains import *
 from utils.check_settings import *
-from PIL import Image, ImageTk
-
 from face.send_data_face import senddataface
-from face.init_face import initface
-import tkinter as tk
 from tkinter.font import Font
 
 auto_trans_state = False
@@ -14,6 +8,9 @@ auto_trans_state = False
 
 def get_auto_trans_state():
     return auto_trans_state
+
+
+SendFaceTitle = "Ensure the successful login of the payment\ntool webpage ,click to start"
 
 
 class SendFace():
@@ -35,17 +32,15 @@ class SendFace():
         self.send_face = creat_face(self.master)
         self.club_id = check_settings.get_setting_value("clubId")
 
-        # create_bg(self.send_face)
-
-        self.send_face_title = "Ensure the successful login of the payment\ntool webpage ,click to start"
+        self.send_face_title = SendFaceTitle
         self.send_face_w01 = create_face_title_label(self.send_face, name=self.send_face_title)
         self.send_face_w01.grid(row=0, column=0, columnspan=3, sticky=W + N + E + S)
 
-        from face.home_face import  get_web_platform
-        self.web_platform=get_web_platform()
-        Label(self.send_face,text=self.web_platform).grid(row=1, column=0, columnspan=3, sticky=W + N + E + S)
-
-        # self.send_face_lable01 =create_face_label(self.send_face, name=f'Club id:{self.club_id}')
+        from face.home_face import get_web_platform
+        self.web_platform = get_web_platform()
+        Label(self.send_face, text=f'From {self.web_platform.upper()} Webpage', bg='#f0f0f0').grid(row=1, column=0,
+                                                                                           columnspan=3,
+                                                                                           sticky=W + N + E + S)
 
         self.send_face_lable01 = Label(self.send_face, text=f'Club id: {self.club_id}', font='黑体', width='20',
                                        height='2', padx=0, pady=3, bg='#f0f0f0')
@@ -71,7 +66,6 @@ class SendFace():
         self.strat_btn.config(image=self.photo_stop)
         self.strat_btn.bind('<Button-1>', func=self.stop_auto_girl)
 
-
     def stop_auto_girl(self, event):
         print("go to stop")
         global auto_trans_state
@@ -80,8 +74,7 @@ class SendFace():
         self.strat_btn.bind('<Button-1>', func=self.start_auto_girl)
 
     def to_display_data(self, event):
-
-        senddataface.create(self.send_face,self.web_platform)
+        senddataface.create(self.send_face, self.web_platform)
 
 
 sendface = SendFace()

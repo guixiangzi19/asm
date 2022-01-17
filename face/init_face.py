@@ -1,7 +1,6 @@
 from utils.create_widget import *
 
 
-
 class InitFace():
     def __init__(self):
         self.no_face = None
@@ -15,4 +14,5 @@ class InitFace():
         self.master = master
         self.no_face = creat_data_face(self.master)
 
-initface=InitFace()
+
+initface = InitFace()

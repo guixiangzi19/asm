@@ -105,7 +105,7 @@ def create_confirm_btn(master, commd, image_file=None):
         photo = PhotoImage(file=image_file)
     else:
         photo = None
-    btn = Button(master, text='Confirm', image=photo, font='黑体', width='30', height='2', command=commd)
+    btn = Button(master, text='Confirm', image=photo, font='黑体', width='25', height='2', command=commd)
     return btn
 
 

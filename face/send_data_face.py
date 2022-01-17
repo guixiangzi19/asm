@@ -1,8 +1,4 @@
-from tkinter import messagebox
 from utils.create_widget import *
-from utils.constains import *
-from utils.check_settings import *
-from PIL import Image, ImageTk
 from utils.excel_handler import *
 
 
@@ -32,57 +28,49 @@ class SendDataFace():
             lab = create_desk_bg_lab(self.send_data_face, name=data)
             lab_dict["lab"] = lab
             lab_dict["row_no"] = i
-            lab_dict["email"] =tran.get("email")
+            lab_dict["email"] = tran.get("email")
             lab_dict["state"] = tran.get("state")
-            # email_list.append(tran.get("email"))
-            # email=tran.get("email")
+
             if tran.get('state', None) == 'fail':
-                btn = Button(self.send_data_face, text="resend" ,command=self.to_bind_eg(lab_dict["email"]))
-                print(lab_dict["email"])
-                # btn.bind('<Button-1>', func=self.to_bind_eg)
+                btn = Button(self.send_data_face, text="Bind", bg='grey2', relief='flat',
+                             command=self.to_bind_eg(lab_dict["email"]))
+                # btn = Label(self.send_data_face, text="Bind", bg='grey1')
+                # btn.bind('<Button-1>', func=self.to_bind_eg(lab_dict["email"]))
                 lab_dict["btn"] = btn
             self.lab_list.append(lab_dict)
-            i = i+1
+            i = i + 1
         j = 0
         for a in self.lab_list:
             a.get("lab").grid(row=j, column=0, columnspan=2, sticky=W + N + E + S)
-            if a.get("btn",None):
+            if a.get("btn", None):
                 a.get("btn").grid(row=j, column=2)
             j = j + 1
 
-
-            # # a="297177457@qq.com"
-            # # b="10000"
-            # # c="98979797"
-            # # d="Dec 25 2021,3:43 PM"
-            # # e=True
-            # data=f"Email:{a}          $:{b}\ngame id:{c}            {d}"
-            #
-            # create_desk_bg_lab(self.send_data_face, name=data).grid(row=i, column=0, columnspan=2,sticky=W+N+E+S)
-            # if e:
-            #     Button(self.send_data_face,text="resend").grid(row=i, column=2)
-            #     pass
-
     def to_bind_eg(self, email):
         def bind():
-            self.set_email_gameid_page = create_settings_top_level(self.send_data_face,title="bind")
-            self.email_label = Label(self.set_email_gameid_page, text=f'Mailbox:{email}')
-            self.email_label.grid(row=1, column=1, sticky=S, pady=15)
+            self.eeeee=email
+            self.set_email_gameid_page = create_settings_top_level(self.send_data_face, title="bind")
+            self.email_label = Label(self.set_email_gameid_page, text=f'Email: {email}')
+            self.email_label.grid(row=0, column=0, columnspan=2, sticky=S, pady=15)
 
-            self.email_entry = Entry(self.set_email_gameid_page)
-            self.email_entry.grid(row=1, column=2, sticky=S, pady=15)
+            self.game_id_label = Label(self.set_email_gameid_page, text='game id:')
+            self.game_id_label.grid(row=1, column=0, sticky=S, padx=5, pady=15)
 
-            self.pwd_label = Label(self.set_email_gameid_page, text='game id:')
-            self.pwd_label.grid(row=2, column=1, sticky=S, pady=15)
+            self.game_id_entry = Entry(self.set_email_gameid_page)
+            self.game_id_entry.grid(row=1, column=1, sticky=S, pady=15)
 
-            self.pwd_entry = Entry(self.set_email_gameid_page)
-            self.pwd_entry.grid(row=2, column=2, sticky=S, pady=15)
+            self.confirm_btn = create_confirm_btn(self.set_email_gameid_page,
+                                                  commd=self._save_bind_eg)
+            self.confirm_btn.grid(row=2, column=0, columnspan=2, sticky=W + E, padx=30, pady=25)
 
-            self.confirm_btn = create_confirm_btn(self.set_email_gameid_page, commd=self._save_bind_eg)
-            self.confirm_btn.grid(row=3, column=1, columnspan=2, sticky=W + E, padx=5, pady=25)
         return bind
 
-    def _save_bind_eg(self,email,game_id):
+    def _save_bind_eg(self):
+        print(self.eeeee)
+        print(self.game_id_entry.get())
+        # 写绑定关系数据库
+        self.set_email_gameid_page.destroy()
+
         pass
 
 
