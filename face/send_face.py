@@ -24,12 +24,12 @@ class SendFace():
     def create_nothing(self, master):
         self._destroy()
         self.master = master
-        self.send_face = creat_face(self.master)
+        self.send_face = create_face(self.master)
 
     def create(self, master):
         self._destroy()
         self.master = master
-        self.send_face = creat_face(self.master)
+        self.send_face = create_face(self.master)
         self.club_id = check_settings.get_setting_value("clubId")
 
         self.send_face_title = SendFaceTitle

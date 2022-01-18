@@ -17,7 +17,7 @@ class ProfileFace():
     def create(self, master):
         self._destroy()
         self.master = master
-        self.profile_face = creat_face(self.master)
+        self.profile_face = create_face(self.master)
 
         self.club_id = check_settings.get_setting_value("clubId")
         self.exchange_money = check_settings.get_setting_value("money", section='usa')
@@ -53,7 +53,7 @@ class ProfileFace():
         self.club_id_entry01 = Entry(self.set_club_id_page)
         self.club_id_entry01.grid(row=1, column=4, sticky=S, padx=50, pady=50)
         self.confirm_btn = create_confirm_btn(self.set_club_id_page, commd=self._save_club_id)
-        self.confirm_btn.grid(row=2, column=4, sticky=S)
+        self.confirm_btn.grid(row=2, column=4,padx=20, sticky=N+S+W+E)
 
     def _save_club_id(self):
         clubId = self.club_id_entry01.get()
@@ -95,7 +95,7 @@ class ProfileFace():
         self.money_entry.grid(row=1, column=1, sticky=S,padx=10, pady=15)
 
         self.money_option_menu = OptionMenu(self.set_exchange_page, self.var, *money_tuple)
-        self.money_option_menu.grid(row=1, column=2, sticky=S, pady=15)
+        self.money_option_menu.grid(row=1, column=2, sticky=N + W + E + S, pady=15)
 
         self.chips_entry = Entry(self.set_exchange_page, width=4)
         self.chips_entry.grid(row=1, column=3, sticky=S,padx=10, pady=15)

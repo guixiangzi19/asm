@@ -15,6 +15,7 @@ class PokerHubUI:
         self.club_id = club_id
         self.app = win_app
         self.login_poker()
+        self.switch_club_id(club_id)
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(PokerHubUI, '_instance'):
@@ -63,21 +64,26 @@ class PokerHubUI:
 
         # touch
 
+    def switch_club_id(self, club_id):
+        pos = self.__exists("back_btn")
+        while pos:
+            touch(pos)
+            pos = self.__exists("back_btn")
+
+        self.__click_template("club_id_filter")
+        self.__click_template("club_id_edit")
+        self.__text(club_id)
+        self.__click_template("club_id_search")
+        self.__click_template("club_counter")
+
+
     def open_counter(self):
         self.poker_to_top()
         if not self.__exists("counter_flag"):
             if self.__exists("login_flag"):
                 self.login_poker()
 
-            pos = self.__exists("back_btn")
-            while pos:
-                touch(pos)
-                pos = self.__exists("back_btn")
-
-            self.__click_template("club_id_filter")
-            self.__click_template("club_id_edit")
-            self.__text(self.club_id)
-            self.__click_template("club_id_search")
+            self.switch_club_id(self.club_id)
         else:
             self.__click_template("back_btn")
         self.__click_template("club_counter")

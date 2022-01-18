@@ -1,4 +1,5 @@
 from tkinter import messagebox
+from tkinter.ttk import Separator
 from utils.create_widget import *
 from face.home_face import homeface, get_web_platform
 from face.profile_face import profileface
@@ -21,16 +22,14 @@ class MenuFace():
         if self.menu_face:
             self.menu_face.destroy()
 
-    def create(self, master):
+    def create(self, left, right):
         self._destroy()
-        self.master = master
-        self.menu_face = creat_menu_face(self.master)
+        self.left = left
+        self.right = right
+        self.menu_face = create_menu_face(self.left)
 
-        # sep_h = Separator(self.root, orient=HORIZONTAL)
-        # sep_h.grid(row=0, column=1, columnspan=4, sticky=W+E)
-        #
-        # sep_v = Separator(self.root, orient=VERTICAL)
-        # sep_v.grid(row=0, column=1, rowspan=4, sticky=N + S,padx=0)
+        sep_v = Separator(self.left, orient=VERTICAL, style=f'{grey1}.TSeparator')
+        sep_v.grid(row=0, column=1, rowspan=4, sticky=N + S, padx=0)
 
         self.photo_home1 = open_image('image/home01.png', (28, 28))
         self.photo_home2 = open_image('image/home02.png', (28, 28))
@@ -65,15 +64,15 @@ class MenuFace():
             return
         self.face_destroy()
         self.home_lab_on()
-        homeface.create(self.master)
+        homeface.create(self.right)
 
     def go_to_send(self, event):
         if not get_web_platform():
             self.do_not_init_send_face()
             return
         self.face_destroy()
-        self.send_lab_off()
-        sendface.create(self.master)
+        self.send_lab_on()
+        sendface.create(self.right)
 
     def go_to_claim_back(self, event):
         if get_auto_trans_state():
@@ -81,7 +80,7 @@ class MenuFace():
             return
         self.face_destroy()
         self.claim_back_lab_on()
-        claimbackface.create(self.master)
+        claimbackface.create(self.right)
 
     def go_to_profile(self, event):
         if get_auto_trans_state():
@@ -89,7 +88,7 @@ class MenuFace():
             return
         self.face_destroy()
         self.profile_lab_on()
-        profileface.create(self.master)
+        profileface.create(self.right)
 
     def face_destroy(self):
         self.home_lab_off()
@@ -102,18 +101,18 @@ class MenuFace():
         claimbackface._destroy()
 
     def do_not_init_send_face(self):
-        sendface.create_nothing(self.master)
+        sendface.create_nothing(self.right)
         self.info_page = create_settings_top_level(sendface.send_face, "info")
 
         def _go_home():
             self.info_page.destroy()
             self.face_destroy()
             self.home_lab_on()
-            homeface.create(self.master)
+            homeface.create(self.right)
 
         Label(self.info_page, text=SendPageHint).grid(row=0, column=0, padx=20, pady=50)
         self.confirm_btn = create_confirm_btn(self.info_page, commd=_go_home)
-        self.confirm_btn.grid(row=1, column=0,padx=20, pady=50)
+        self.confirm_btn.grid(row=1, column=0, padx=20, pady=50)
 
     def do_not_change_page_hint(self):
         messagebox.showinfo(message=ChangePageHint)

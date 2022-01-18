@@ -12,7 +12,7 @@ class InitFace():
     def create(self, master):
         self._destroy()
         self.master = master
-        self.no_face = creat_data_face(self.master)
+        self.no_face = create_data_face(self.master)
 
 
 initface = InitFace()

@@ -4,7 +4,7 @@ from face.title_face import  titleface
 from face.home_face import homeface
 from face.claim_back_face import claimbackface
 from face.profile_face import profileface
-
+from face.desk import initdesk
 AppName = "AMS"
 WinInfo= "660x520+50+50"
 
@@ -16,11 +16,11 @@ class BaseDesk(Frame):
         self.root.config(bg=grey1)
         self.root.title(AppName)
         self.root.geometry(WinInfo)
-        menuface.create(self.root)
-        titleface.create(self.root)
-        menuface.profile_lab_on()
-        profileface.create(self.root)
-
+        # menuface.create(self.root)
+        # # titleface.create(self.root)
+        # menuface.profile_lab_on()
+        # profileface.create(self.root)
+        initdesk.create_desk(self.root)
     #
     # def __new__(cls, *args, **kwargs):
     #     if not hasattr(cls, '_instance'):

@@ -13,7 +13,7 @@ class SendDataFace():
     def create(self, master, web_platform):
         self._destroy()
         self.master = master
-        self.send_data_face = creat_data_face(self.master)
+        self.send_data_face = create_data_face(self.master)
         trans_list = get_trans_data(web_platform)
         trans_len = len(trans_list)
         self.lab_list = list()
@@ -32,7 +32,7 @@ class SendDataFace():
             lab_dict["state"] = tran.get("state")
 
             if tran.get('state', None) == 'fail':
-                btn = Button(self.send_data_face, text="Bind", bg='grey2', relief='flat',
+                btn = Button(self.send_data_face, text="Bind", bg=grey1, relief='flat',
                              command=self.to_bind_eg(lab_dict["email"]))
                 # btn = Label(self.send_data_face, text="Bind", bg='grey1')
                 # btn.bind('<Button-1>', func=self.to_bind_eg(lab_dict["email"]))
@@ -41,7 +41,7 @@ class SendDataFace():
             i = i + 1
         j = 0
         for a in self.lab_list:
-            a.get("lab").grid(row=j, column=0, columnspan=2, sticky=W + N + E + S)
+            a.get("lab").grid(row=j, column=0, columnspan=2, padx=5, sticky=W + N + E + S)
             if a.get("btn", None):
                 a.get("btn").grid(row=j, column=2)
             j = j + 1
