@@ -2,7 +2,7 @@ import random, time
 
 from threading import Thread
 
-from service_data import *
+from service.service_data import *
 from ui.poker_hub_ui import PokerHubUI
 from ui.neteller_ui import NetellerUi
 from utils.check_settings import check_settings
@@ -42,36 +42,35 @@ class SendThread(Thread):
             money = check_settings.get_setting_value("money", unit)
             chips = check_settings.get_setting_value("chips", unit)
             if money and chips:
-                self.exchange_rate[unit] = float(chips)/float(money)
+                self.exchange_rate[unit.upper()] = float(chips)/float(money)
 
 
         payment_ui = None
-        if self.payment == "neteller":
+        if self.payment == NETELLER_PAYMENT:
             payment_ui = NetellerUi()
 
         global send_loop
         while send_loop:
             try:
-                from utils.constains import LAST_TRANSACTION_ID
-                pay_info_queue = payment_ui.get_transaction_datas(LAST_TRANSACTION_ID)
+                pay_info_queue = payment_ui.get_transaction_datas(get_last_transaction_id())
 
                 while not pay_info_queue.empty():
                     pay_info = pay_info_queue.get()
-                    LAST_TRANSACTION_ID = pay_info.get("transaction_id")
+                    set_last_transaction_id(pay_info.get("transaction_id"))
                     db_util.payment_info_tab_insert(**pay_info)
                     if pay_info.get("status") == STATUS_FAILED:
                         continue
                     result = self._send_chips(pay_info)
-                    db_util.send_chips_info_tab_insert(result)
+                    db_util.send_chips_info_tab_insert(**result)
 
-            except:
+            except Exception as e:
                 pass
 
             resend = get_resend_queue()
             while not resend.empty():
                 resend_info = resend.get()
                 result = self._send_chips(resend_info)
-                db_util.send_chips_info_tab_update_status(result)
+                db_util.send_chips_info_tab_update_status(**result)
 
             time.sleep(random.randint(120, 240))
 
@@ -87,7 +86,7 @@ class SendThread(Thread):
         send_reslut = "0"
         message = "succeed"
         if game_id:
-            chips_count = int(self.exchange_rate.get(pay_info.get("unit")) * pay_info.get("amount"))
+            chips_count = int(self.exchange_rate.get(pay_info.get("unit").upper()) * pay_info.get("amount"))
             send_record["chips_amount"] = chips_count
 
             if chips_count > 0:
@@ -115,4 +114,4 @@ class SendThread(Thread):
 
 
 
-start("neteller")
+# start("neteller")

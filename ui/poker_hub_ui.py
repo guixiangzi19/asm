@@ -17,6 +17,7 @@ class PokerHubUI:
         self.login_poker()
         self.switch_club_id(club_id)
 
+
     def __new__(cls, *args, **kwargs):
         if not hasattr(PokerHubUI, '_instance'):
             PokerHubUI._instance = super().__new__(cls)
@@ -65,13 +66,13 @@ class PokerHubUI:
         # touch
 
     def switch_club_id(self, club_id):
-        pos = self.__exists("back_btn")
+        pos = self.__exists("back_btn", threshold=0.9)
         while pos:
             touch(pos)
-            pos = self.__exists("back_btn")
+            pos = self.__exists("back_btn", threshold=0.9)
 
         self.__click_template("club_id_filter")
-        self.__click_template("club_id_edit")
+        self.__click_template("club_id_edit", threshold=0.7)
         self.__text(club_id)
         self.__click_template("club_id_search")
         self.__click_template("club_counter")
@@ -85,45 +86,45 @@ class PokerHubUI:
 
             self.switch_club_id(self.club_id)
         else:
-            self.__click_template("back_btn")
-        self.__click_template("club_counter")
+            self.__click_template("back_btn", threshold=0.9)
+            self.__click_template("club_counter")
 
 
     def send_recovery_gold(self, id, count, type="send"):
         self.open_counter()
         self.__click_template("counter_search", offset=(-100, 0), threshold=0.7)
         self.__text(id)
-        if self.__exists("counter_check_box_0"):
-            self.__click_template("counter_check_box_0")
+        if self.__exists("counter_check_box_0", threshold=0.7):
+            self.__click_template("counter_check_box_0", threshold=0.7)
         elif not self.__exists("counter_check_box_1"):
             return "-2"  #没有找到对应的游戏ID
 
-        btn_name = "counter_send_out" if "send"==type else "counter_claim_back"
-        self.__click_template(btn_name)
+        offset = (-30, 0) if "send"==type else (30, 0)
+        self.__click_template("counter_flag", offset)
         self.__click_template("send_out_edit")
-        self.__text(count)
+        self.__text(str(count))
         self.__click_template("send_out_confirm")
 
         if self.__exists("send_out_confirm"):
-            self.__click_template("back_btn")
+            self.__click_template("back_btn", threshold=0.9)
             return "-1"   #执行失败
 
         return "0"
 
 
 
-    def __get_template(self, name, threshold=0.9):
+    def __get_template(self, name, threshold=0.7):
         path = os.path.dirname(__file__)
         file = os.path.join(path, f"../resource/image/{name}.png")
-        return Template(file, resolution=(468, 867), threshold=threshold)
+        return Template(file, resolution=(444, 835), threshold=threshold)
 
-    def __click_template(self, name, offset=(0, 0), threshold=0.9, timeout=20):
+    def __click_template(self, name, offset=(0, 0), threshold=0.7, timeout=20):
         t = self.__get_template(name, threshold=threshold)
         t_pos = loop_find(t, timeout=timeout)
         touch_pos = (t_pos[0] + offset[0], t_pos[1] + offset[1])
         touch(touch_pos)
 
-    def __exists(self, name, threshold=0.9):
+    def __exists(self, name, threshold=0.7):
         return exists(self.__get_template(name, threshold))
 
     def __text(self, text_str, account_len=22):
@@ -133,7 +134,7 @@ class PokerHubUI:
 
 if __name__ == "__main__":
     p = PokerHubUI("test@163.com", "sdfwerv24df334", club_id="100050")
-    print(p.send_recovery_gold("1001591", "100"))
-    print(p.send_recovery_gold("100159", "100"))
+    # print(p.send_recovery_gold("1001591", "100"))
+    # print(p.send_recovery_gold("100159", "100"))
     print(p.send_recovery_gold("100149", "100", type="claim"))
     print(p.send_recovery_gold("100159", "100", type="claim"))

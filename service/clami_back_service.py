@@ -52,4 +52,4 @@ class ClamiBackThread(Thread):
                 message = "send chips has except"
 
 
-start("neteller")
+# start("neteller")

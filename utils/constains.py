@@ -7,6 +7,9 @@ title_face_location = {"row": 0, "column": 0, "columnspan": 4, 'sticky': 'news'}
 face_location = {"row": 1, "column": 0, "rowspan": 4, "columnspan": 4, 'sticky': 'news'}
 data_face_location = {"row": 3, "column": 0, "rowspan": 10, "columnspan": 3, 'sticky': 'news'}
 
+NETELLER_PAYMENT = "neteller"
+SKRILL_PAYMENT = "skrill"
+
 payment_methods = ["neteller", "skrill", "ecopayz"]
 transactions_table_header = ["transaction_id", "email", "game_id", "amount", 'unit', "chips", "date", "state"]
 bind_table_header = ["email", "game_id"]
@@ -21,7 +24,7 @@ CHROME_DATA_PATH = os.path.join(os.path.expanduser("~"), "AppData/Local/Google/C
 DRIVER_PATH = os.path.join(os.path.dirname(__file__), "../resource/chromeDriver/chromedriver.exe")
 
 NETELLER_URL = "https://member.neteller.com/wallet/ng/transaction-history-v2"
-LAST_TRANSACTION_ID = None
+
 
 STATUS_SUCCEED = "succeed"
 STATUS_FAILED = "failed"

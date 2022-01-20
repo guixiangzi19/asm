@@ -9,7 +9,7 @@ class DBUtils:
         if not os.path.exists(os.path.dirname(db_path)):
             os.mkdir(os.path.dirname(db_path))
 
-        self.conn = sqlite3.connect(db_path)
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.cu = self.conn.cursor()
         self.create_table()
 
@@ -264,3 +264,6 @@ db_util = DBUtils()
 # db_util.send_chips_info_tab_insert(**s_info1)
 # print(db_util.get_send_results(5))
 # print(db_util.get_send_results_by_time(start_time))
+from utils.constains import NETELLER_PAYMENT
+db_util.email_game_tab_update("victoryxu666@gmail.com", "100347", NETELLER_PAYMENT)
+
