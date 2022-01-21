@@ -63,14 +63,13 @@ class NetellerUi(PaymentBase):
                 self.scroll_ele_into_view(last_transaction_ele)
                 last_transaction_ele.click()
                 set_last_transaction_id(self.get_transaction_detail_info().get("transaction_id"))
-                return None
+                return transcation_info_queue
             else:
                 for transaction_ele in transaction_eles:
                     self.scroll_ele_into_view(transaction_ele)
                     transaction_ele.click()
                     transcation_detail_info = self.get_transaction_detail_info()
                     if transcation_detail_info.get("transaction_id") != last_transaction_id:
-                        print("-----------  ", transcation_detail_info.get("transaction_id"), last_transaction_id)
                         transcation_info_queue.put(transcation_detail_info)
                     else:
                         loop = False

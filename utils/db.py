@@ -21,23 +21,25 @@ class DBUtils:
     def create_table(self):
         try:
             self.cu.execute('''create table email_game_tab(
-            email text, 
-            game_id text, 
-            payment text
+            email text NOT NULL, 
+            game_id text NOT NULL, 
+            payment text,
+            UNIQUE(email, game_id, payment)
             );''')
-        except:
+        except Exception as e:
             pass
         try:
             self.cu.execute('''create table payment_info_tab(
             id integer primary key autoincrement, 
-            transaction_id text,
-            email text,
-            amount real,
+            transaction_id text NOT NULL,
+            email text NOT NULL,
+            amount real NOT NULL,
             unit text,
             transaction_date text,
             status text,
-            payment text,
-            create_time integer
+            payment text NOT NULL,
+            create_time integer,
+            UNIQUE (transaction_id,payment) 
             );''')
         except:
             pass
@@ -52,7 +54,8 @@ class DBUtils:
             message text,
             payment text,
             club_id text,
-            update_time integer
+            update_time integer,
+            UNIQUE (transaction_id,payment) 
             );''')
         except:
             pass
@@ -81,6 +84,17 @@ class DBUtils:
         for row in cursor:
             return row[0]
         return None
+
+    def get_email_id_by_page(self, page_size, page_index, paymment):
+        result = []
+        offset = (page_index-1)*page_size
+        cursour = self.cu.execute(f"select email, game_id from email_game_tab where payment='{paymment}' limit {page_size} offset {offset}")
+        for row in cursour:
+            d = {}
+            d["email"] = row[0]
+            d["game_id"] = row[1]
+            result.append(d)
+        return result
 
     def payment_info_tab_insert(self, **kwargs):
         sql_pre_str = '''insert into payment_info_tab(
@@ -129,7 +143,7 @@ class DBUtils:
             f"update send_chips_info_tab set game_id='{game_id}', status='{status}', message='{message}', update_time={update_time} where transaction_id='{transaction_id}' and payment='{payment}'")
         self.conn.commit()
 
-    def get_send_results(self, row_num, payment=None, club_id=None, id=None):
+    def get_send_results(self, page_size, payment=None, club_id=None, id=None):
         sql = '''select p.transaction_id, p.email, p.amount, p.unit, p.transaction_date, p.payment, s.id,
          s.game_id, s.chips_amount, s.status, s.message, s.club_id 
          from payment_info_tab AS p LEFT OUTER JOIN send_chips_info_tab AS s 
@@ -140,7 +154,7 @@ class DBUtils:
             sql = f"{sql} and s.club_id='{club_id}'"
         if id:
             sql = f"{sql} and s.id<{id}"
-        sql = f"{sql} order by p.id desc limit {row_num}"
+        sql = f"{sql} order by p.id desc limit {page_size}"
         cursor = self.cu.execute(sql)
         return self._traversal_cursor(cursor)
 
@@ -265,5 +279,6 @@ db_util = DBUtils()
 # print(db_util.get_send_results(5))
 # print(db_util.get_send_results_by_time(start_time))
 from utils.constains import NETELLER_PAYMENT
-db_util.email_game_tab_update("victoryxu666@gmail.com", "100347", NETELLER_PAYMENT)
+# db_util.email_game_tab_update("victoryxu666@gmail.com", "100347", NETELLER_PAYMENT)
+print(db_util.get_send_results(10, NETELLER_PAYMENT, "100050"))
 

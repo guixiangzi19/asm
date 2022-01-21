@@ -105,7 +105,7 @@ class PokerHubUI:
         self.__text(str(count))
         self.__click_template("send_out_confirm")
 
-        if self.__exists("send_out_confirm"):
+        if not self.__exists("counter_flag"):
             self.__click_template("back_btn", threshold=0.9)
             return "-1"   #执行失败
 
