@@ -27,7 +27,7 @@ class ProfileFace():
         self.profile_face_label01 = create_profile_face_label(self.profile_face, name=f"   {ClubId}:{self.club_id}")
 
         self.profile_face_label01.grid(row=1, column=2, pady=5)
-        self.photo_jt = open_image('image/btn_jt.jpg', (30, 30))
+        self.photo_jt = open_image('image/forward.png', (9, 15))
         self.profile_face_label11 = create_profile_face_btn_label(self.profile_face, photo=self.photo_jt)
         self.profile_face_label11.bind('<Button-1>', func=self.go_to_set_clubid)
         self.profile_face_label11.grid(row=1, column=3, pady=5, sticky=N + W + E + S)

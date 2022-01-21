@@ -41,6 +41,28 @@ def create_data_face(master, bg='green'):
     return face
 
 
+def create_zw_face(master,row=0,column=0, bg='green'):
+    l='                                                                            '
+    r='      '
+    c='                                                    '
+
+    face1 = Frame(master)
+    face1.config(bg=grey1)
+    face1.grid(row=row, column=column, columnspan=4, sticky=W + E + N + S)
+    Label(face1,text=l,bg=grey1).grid(row=0, column=0)
+
+    face2 = Frame(master)
+    face2.config(bg=grey1)
+    face2.grid(row=2, column=0, columnspan=4, sticky=W + E + N + S)
+    Label(face2, text=r, bg=grey1).grid(row=0, column=0)
+
+    face3 = Frame(master)
+    face3.config(bg=grey1)
+    face3.grid(row=1, column=0, columnspan=4, sticky=W + E + N + S)
+    Label(face3, text=c, bg=grey1).grid(row=0, column=0)
+    return face3
+
+
 def create_menu_face(master, bg='green'):
     face = Frame(master)
     face.config(bg=grey2)
@@ -56,7 +78,7 @@ def create_title_face(master, bg='green'):
 
 
 def create_desk_title_lab(master, name):
-    lab = Label(master, text=name, font='Sylfaen 15', width='60', height='3', bg=grey1)
+    lab = Label(master, text=name, font='Sylfaen 30 normal', width='30', height='3', bg=grey1)
     return lab
 
 
@@ -82,7 +104,7 @@ def create_profile_face_label(master, name=None, photo=None):
 
 
 def create_profile_face_btn_label(master, name=None, photo=None):
-    lab = Label(master, text=name, image=photo, height='2', bg=grey2)
+    lab = Label(master, text='     ', image=photo,compound='left', height='2', bg=grey2)
     return lab
 
 
@@ -111,7 +133,7 @@ def create_confirm_btn(master, image_file=None, commd=None):
         photo = PhotoImage(file=image_file)
     else:
         photo = None
-    btn = Button(master, text='Confirm', image=photo, font='黑体', width='25', height='2',command=commd)
+    btn = Button(master, text='Confirm', image=photo, font='黑体', width='25', height='2', command=commd)
     return btn
 
 

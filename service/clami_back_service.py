@@ -2,7 +2,7 @@ import random, time
 
 from threading import Thread
 
-from service_data import *
+from service.service_data import *
 from ui.poker_hub_ui import PokerHubUI
 from ui.neteller_ui import NetellerUi
 from utils.check_settings import check_settings
@@ -15,10 +15,9 @@ def is_clami_back_service_run():
     return clami_back_loop
 
 def start(clami_back_list):
-
+    global clami_back_loop
     if len(clami_back_loop) <= 0:
         return
-    global clami_back_loop
     clami_back_loop = True
     clami_back = ClamiBackThread(clami_back_list)
     clami_back.start()

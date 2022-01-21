@@ -1,9 +1,8 @@
 from tkinter import messagebox
 from utils.create_widget import *
-from utils.constains import *
 from tkinter.filedialog import askopenfilename
 from utils.excel_handler import *
-
+# from service.clami_back_service import start
 
 class ClaimBackFace():
     def __init__(self):
@@ -58,10 +57,8 @@ class ClaimBackFace():
         if not self.upload_file_dir:
             messagebox.showinfo(message="pleas select a excel file first ")
             return
-        claim_list = get_data_from_excel(self.upload_file_dir, sheet_name="claim_back_list")
-
-
-#
+        claim_back_list = get_data_from_excel(self.upload_file_dir, sheet_name="claim_back_list")
+        # start(claim_back_list)
 #       #此初调用金币回收接口
 
 

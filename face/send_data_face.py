@@ -1,5 +1,6 @@
 from utils.create_widget import *
 from utils.excel_handler import *
+from utils.db import db_util
 
 
 class SendDataFace():
@@ -15,63 +16,35 @@ class SendDataFace():
         self.master = master
         self.send_data_face = create_data_face(self.master)
         trans_list = get_trans_data(web_platform)
-        trans_len = len(trans_list)
-        self.lab_list = list()
-        i = 0
-        email_list = list()
+        self.data_title_col(self.send_data_face, web_platform)
+        self.data_show_col(self.send_data_face,trans_list)
+        # trans_list = db_util.get_send_results(row_num=5)
+
+    def data_title_col(self,master,web_platform):
+        self.master = master
+        self.data_title_face = create_zw_face(self.master)
+        self.web_page_title = Label(self.master, text=web_platform.upper(), anchor=W, bg=grey1)
+        self.web_page_title.grid(row=0, padx=30, column=0, sticky=N + W + E + S)
+
+    def data_show_col(self,master,trans_list):
+        self.master = master
+        self.data_show_face = create_zw_face(self.master,row=1,column=0)
+        row = 0
         for tran in trans_list:
-            lab_dict = {}
-            data = ""
-            for k, v in tran.items():
-                if k in ["email", "game_id", "chips", "date"]:
-                    data += str(k) + ':' + str(v) + '    '
-            lab = create_desk_bg_lab(self.send_data_face, name=data)
-            lab_dict["lab"] = lab
-            lab_dict["row_no"] = i
-            lab_dict["email"] = tran.get("email")
-            lab_dict["state"] = tran.get("state")
+            self.create_data_show_list(self.data_show_face, row=row, data=tran)
+            row = row + 1
 
-            if tran.get('state', None) == 'fail':
-                btn = Button(self.send_data_face, text="Bind", bg=grey1, relief='flat',
-                             command=self.to_bind_eg(lab_dict["email"]))
-                # btn = Label(self.send_data_face, text="Bind", bg='grey1')
-                # btn.bind('<Button-1>', func=self.to_bind_eg(lab_dict["email"]))
-                lab_dict["btn"] = btn
-            self.lab_list.append(lab_dict)
-            i = i + 1
-        j = 0
-        for a in self.lab_list:
-            a.get("lab").grid(row=j, column=0, columnspan=2, padx=5, sticky=W + N + E + S)
-            if a.get("btn", None):
-                a.get("btn").grid(row=j, column=2)
-            j = j + 1
-
-    def to_bind_eg(self, email):
-        def bind():
-            self.eeeee=email
-            self.set_email_gameid_page = create_settings_top_level(self.send_data_face, title="bind")
-            self.email_label = Label(self.set_email_gameid_page, text=f'Email: {email}')
-            self.email_label.grid(row=0, column=0, columnspan=2, sticky=S, pady=15)
-
-            self.game_id_label = Label(self.set_email_gameid_page, text='game id:')
-            self.game_id_label.grid(row=1, column=0, sticky=S, padx=5, pady=15)
-
-            self.game_id_entry = Entry(self.set_email_gameid_page)
-            self.game_id_entry.grid(row=1, column=1, sticky=S, pady=15)
-
-            self.confirm_btn = create_confirm_btn(self.set_email_gameid_page,
-                                                  commd=self._save_bind_eg)
-            self.confirm_btn.grid(row=2, column=0, columnspan=2, sticky=W + E, padx=30, pady=25)
-
-        return bind
-
-    def _save_bind_eg(self):
-        print(self.eeeee)
-        print(self.game_id_entry.get())
-        # 写绑定关系数据库
-        self.set_email_gameid_page.destroy()
-
-        pass
-
+    def create_data_show_list(self, master, row, data):
+        self.data_list_face = Frame(master)
+        self.data_list_face.config(bg=grey1)
+        self.data_list_face.grid(row=row, column=0, columnspan=3, sticky=W + N + E + S)
+        self.email_lab = Label(self.data_list_face, text=f'Email:{data.get("email")}', anchor=W, bg=grey1)
+        self.email_lab.grid(row=0, padx=30, column=0, sticky=N + W + E + S)
+        self.chips_lab = Label(self.data_list_face, text=f'$:{data.get("chips")}', anchor=E, bg=grey1)
+        self.chips_lab.grid(row=0, column=1, sticky=N + W + E + S)
+        self.game_id_lab = Label(self.data_list_face, text=f'Game id:{data.get("game_id")}', anchor=W, bg=grey1)
+        self.game_id_lab.grid(row=1, padx=30, column=0, sticky=N + W + E + S)
+        self.date_lab = Label(self.data_list_face, text=f'{data.get("date")}', anchor=E, bg=grey1)
+        self.date_lab.grid(row=1, column=1, sticky=N + W + E + S)
 
 senddataface = SendDataFace()

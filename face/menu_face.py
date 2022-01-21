@@ -5,6 +5,8 @@ from face.home_face import homeface, get_web_platform
 from face.profile_face import profileface
 from face.send_face import sendface, get_auto_trans_state
 from face.claim_back_face import claimbackface
+from face.eg_bind_face import egbindface
+from face.send_data_details_face import senddatadetailsface
 
 HOME = '     Home     '
 SEND = '     Send     '
@@ -95,10 +97,13 @@ class MenuFace():
         self.send_lab_off()
         self.claim_back_lab_off()
         self.profile_lab_off()
+        egbindface._destroy()
         homeface._destroy()
         profileface._destroy()
         sendface._destroy()
         claimbackface._destroy()
+        senddatadetailsface._destroy()
+
 
     def do_not_init_send_face(self):
         sendface.create_nothing(self.right)

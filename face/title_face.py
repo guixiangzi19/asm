@@ -1,6 +1,6 @@
 from utils.create_widget import *
 from tkinter.ttk import Separator
-AppTitle = "Agent Manager System                                  "
+AppTitle = "Agent Manager System"
 
 
 class TitleFace():
