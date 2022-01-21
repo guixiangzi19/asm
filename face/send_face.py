@@ -2,10 +2,14 @@ from utils.create_widget import *
 from utils.check_settings import *
 from face.send_data_face import senddataface
 from tkinter.font import Font
+<<<<<<< HEAD
 from tkinter.ttk import Separator
 from face.eg_bind_face import egbindface
 from face.send_data_details_face import senddatadetailsface
 
+=======
+from service.send_service import start
+>>>>>>> a9f2a7b3889547c829cc844db9851a324438af4d
 auto_trans_state = False
 
 
@@ -73,7 +77,12 @@ class SendFace():
         print("go to start")
         self.strat_btn.config(image=self.photo_stop)
         self.strat_btn.bind('<Button-1>', func=self.stop_auto_girl)
+<<<<<<< HEAD
         senddataface.create(self.send_face, self.web_platform)
+=======
+        start(self.web_platform)
+
+>>>>>>> a9f2a7b3889547c829cc844db9851a324438af4d
 
     def stop_auto_girl(self, event):
         print("go to stop")

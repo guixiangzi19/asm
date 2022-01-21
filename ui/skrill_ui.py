@@ -3,22 +3,20 @@ import queue
 
 from selenium.webdriver.common.by import By
 
-from service.service_data import set_last_transaction_id
 from utils.constains import *
 from ui.payment_base_ui import PaymentBase
 
 
-class NetellerUi(PaymentBase):
+class SkrillUi(PaymentBase):
     def __init__(self):
         super().__init__(NETELLER_URL)
 
     def __new__(cls, *args, **kwargs):
-        if not hasattr(NetellerUi, '_instance'):
-            NetellerUi._instance = super().__new__(cls)
-        return NetellerUi._instance
+        if not hasattr(SkrillUi, '_instance'):
+            SkrillUi._instance = super().__new__(cls)
+        return SkrillUi._instance
 
     def get_transaction_datas(self, last_transaction_id=None):
-        self.obtained_id_list = []
         try:
             self.chrome_to_top()
             self.wait_login(".logout")
@@ -35,7 +33,6 @@ class NetellerUi(PaymentBase):
         return self.get_transaction_list(last_transaction_id)
 
     def switch_type(self, type="send"):
-        self.wait_ele_until_not(".loading")
         transactionType_ele = self.wait_ele_until('[name="transactionType"]')
         drop_down_ele = transactionType_ele.find_element(By.CSS_SELECTOR, ".ps-select-arrow-wrapper")
         drop_down_ele.click()
@@ -62,8 +59,8 @@ class NetellerUi(PaymentBase):
                 last_transaction_ele = transaction_eles[0]
                 self.scroll_ele_into_view(last_transaction_ele)
                 last_transaction_ele.click()
-                set_last_transaction_id(self.get_transaction_detail_info().get("transaction_id"))
-                return transcation_info_queue
+                LAST_TRANSACTION_ID = self.get_transaction_detail_info().get("transaction_id")
+                return None
             else:
                 for transaction_ele in transaction_eles:
                     self.scroll_ele_into_view(transaction_ele)
@@ -86,7 +83,7 @@ class NetellerUi(PaymentBase):
     def get_transaction_detail_info(self, retry_time=5) -> dict:
         def run():
             detail_info = {}
-            detail_info["payment"] = NETELLER_PAYMENT
+            detail_info["payment"] = "neteller"
 
             self.wait_ele_until(".ps-side-panel-content .ps-list-item-inner-area")
             detail_info["transaction_date"] = self.find_element_by_css(".transaction-date").text
@@ -115,15 +112,9 @@ class NetellerUi(PaymentBase):
 
         for i in range(retry_time):
             try:
-                detail_info = run()
-                transaction_id = detail_info.get("transaction_id")
-                if transaction_id in self.obtained_id_list:
-                    continue
-                self.obtained_id_list.append(transaction_id)
-                return detail_info
+                return run()
             except:
-                pass
-            time.sleep(0.5)
+                time.sleep(0.5)
 
         raise Exception()
 
