@@ -1,5 +1,8 @@
+import logging
+
 from utils.create_widget import *
 from face.desk import initdesk
+import ctypes
 AppName = "AMS"
 WinInfo= "660x520+50+50"
 
@@ -8,6 +11,9 @@ class BaseDesk(Frame):
     def __init__(self, master):
         super().__init__(master)
         self.root = master
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+        self.root.tk.call('tk', 'scaling', ScaleFactor / 75)
         self.root.config(bg=grey1)
         self.root.title(AppName)
         self.root.geometry(WinInfo)
@@ -23,7 +29,7 @@ class BaseDesk(Frame):
 
 if __name__ == '__main__':
     root = Tk()
-    root.minsize(660, 520)
-    root.maxsize(660, 520)
+    # root.minsize(660, 520)
+    # root.maxsize(660, 520)
     app = BaseDesk(master=root)
     root.mainloop()

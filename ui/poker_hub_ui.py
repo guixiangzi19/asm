@@ -5,14 +5,15 @@ from airtest.core import settings as ST
 
 from utils.constains import *
 from utils.process_utils import *
-from ui.win_ui import win_app, connect_app
 
 class PokerHubUI:
     def __init__(self, user_id, pwd, club_id, poker_path=PORK_DEFAULT_PATH):
+        from ui.win_ui import win_app
+
         self.poker_path = poker_path
-        self.user_id = user_id
-        self.pwd = pwd
-        self.club_id = club_id
+        self.user_id = str(user_id)
+        self.pwd = str(pwd)
+        self.club_id = str(club_id)
         self.app = win_app
         self.login_poker()
         self.switch_club_id(club_id)
@@ -24,6 +25,8 @@ class PokerHubUI:
         return PokerHubUI._instance
 
     def poker_to_top(self):
+        from ui.win_ui import connect_app
+
         poker_name = "PokerHub.exe"
         if not process_is_exists(poker_name):
             bak_path = os.getcwd()
@@ -33,9 +36,9 @@ class PokerHubUI:
             self.app.start_app(poker_name)
             os.chdir(bak_path)
             sleep(3)
-        poker_pid = get_process_pid(poker_name)
-        if len(poker_pid)>0:
-            connect_app(poker_pid.pop())
+        p_pid = get_process_pid(poker_name)
+        if len(p_pid)>0:
+            connect_app(p_pid.pop())
 
 
     def login_poker(self, retry_times=3):
@@ -105,7 +108,11 @@ class PokerHubUI:
         self.__text(str(count))
         self.__click_template("send_out_confirm")
 
-        if not self.__exists("counter_flag"):
+        # if not self.__exists("counter_flag"):
+        #     self.__click_template("back_btn", threshold=0.9)
+        #     return "-1"   #执行失败
+
+        if not self.__exists("counter_search", threshold=0.7):
             self.__click_template("back_btn", threshold=0.9)
             return "-1"   #执行失败
 
@@ -130,7 +137,7 @@ class PokerHubUI:
     def __text(self, text_str, account_len=22):
         for i in range(account_len):
             keyevent("{BACKSPACE}")
-        text(text_str)
+        text(str(text_str))
 
 if __name__ == "__main__":
     p = PokerHubUI("test@163.com", "sdfwerv24df334", club_id="100050")

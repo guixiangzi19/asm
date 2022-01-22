@@ -16,7 +16,7 @@ def is_clami_back_service_run():
 
 def start(clami_back_list):
     global clami_back_loop
-    if len(clami_back_loop) <= 0:
+    if len(clami_back_list) <= 0:
         return
     clami_back_loop = True
     clami_back = ClamiBackThread(clami_back_list)
@@ -35,20 +35,34 @@ class ClamiBackThread(Thread):
     def run(self) -> None:
 
         for clami_back_info in self.clami_back_list:
+            result_info = {}
             game_id = clami_back_info.get("game_id")
             chips_count = clami_back_info.get("count")
+            result_info["game_id"] = game_id
+            result_info["chips_amount"] = chips_count
+            result_info["club_id"] = self.club_id
             result = 0
             message = "succeed"
             try:
-                send_reslut = self.poker_ui.send_recovery_gold(game_id, chips_count, "counter_claim_back")
-                if send_reslut == "-2":
+                claim_back_reslut = self.poker_ui.send_recovery_gold(game_id, chips_count, "counter_claim_back")
+                if claim_back_reslut == "-2":
                     message = "not find game id"
-                elif send_reslut == "-1":
+                elif claim_back_reslut == "-1":
                     message = "send chips failed"
             except:
                 # 记录失败
-                send_reslut = "-3"
+                claim_back_reslut = "-3"
                 message = "send chips has except"
+
+            result_info["status"] = claim_back_reslut
+            result_info["message"] = message
+            if clami_back_info.get("id"):
+                result_info["id"] = clami_back_info.get("id")
+                db_util.claim_back_info_tab_update_status()
+
+            else:
+                db_util.claim_back_info_tab_insert(**result_info)
+
 
 
 # start("neteller")

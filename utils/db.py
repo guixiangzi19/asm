@@ -24,7 +24,8 @@ class DBUtils:
             email text NOT NULL, 
             game_id text NOT NULL, 
             payment text,
-            UNIQUE(email, game_id, payment)
+            club_id text,
+            UNIQUE(email, game_id, payment, club_id)
             );''')
         except Exception as e:
             pass
@@ -60,7 +61,7 @@ class DBUtils:
         except:
             pass
         try:
-            self.cu.execute('''create table clami_back_info_tab(
+            self.cu.execute('''create table claim_back_info_tab(
             id integer primary key autoincrement, 
             game_id text,
             chips_amount integer,
@@ -194,8 +195,8 @@ class DBUtils:
             result.append(row_info)
         return result
 
-    def clami_back_info_tab_insert(self, **kwargs):
-        sql_pre_str = '''insert into send_chips_info_tab(
+    def claim_back_info_tab_insert(self, **kwargs):
+        sql_pre_str = '''insert into claim_back_info_tab(
                     game_id, chips_amount, status, message, club_id, update_time)'''
         game_id = kwargs.get("game_id")
         chips_amount = kwargs.get("chips_amount")
@@ -208,15 +209,41 @@ class DBUtils:
             f"{sql_pre_str} values('{game_id}', '{chips_amount}', '{status}', '{message}', '{club_id}', {update_time})")
         self.conn.commit()
 
-    def clami_back_info_tab_update_status(self, **kwargs):
+    def claim_back_info_tab_update_status(self, **kwargs):
         id = kwargs.get("id")
         status = kwargs.get("status")
         message = kwargs.get("message")
         update_time = int(time.time())
 
         self.cu.execute(
-            f"update send_chips_info_tab set status='{status}', message='{message}', update_time={update_time} where id={id}")
+            f"update claim_back_info_tab set status='{status}', message='{message}', update_time={update_time} where id={id}")
         self.conn.commit()
+
+    def get_claim_back_results(self, page_size, club_id=None, id=None):
+        sql = '''select game_id, chips_amount, status, message, club_id, update_time, id
+         from claim_back_info_tab'''
+        if club_id:
+            sql = f"{sql}  where  club_id='{club_id}'"
+        if id:
+            if "where" in sql:
+                sql = f"{sql} and id<{id}"
+            else:
+                sql = f"{sql} where id<{id}"
+
+        sql = f"{sql} order by id desc limit {page_size}"
+        cursor = self.cu.execute(sql)
+        result = []
+        for row in cursor:
+            row_info = {}
+            row_info["game_id"] = row[0]
+            row_info["chips_amount"] = row[1]
+            row_info["status"] = row[2]
+            row_info["message"] = row[3]
+            row_info["club_id"] = row[4]
+            row_info["update_time"] = row[5]
+            row_info["id"] = row[6]
+            result.append(row_info)
+        return result
 
 db_util = DBUtils()
 
@@ -279,6 +306,7 @@ db_util = DBUtils()
 # print(db_util.get_send_results(5))
 # print(db_util.get_send_results_by_time(start_time))
 from utils.constains import NETELLER_PAYMENT
-# db_util.email_game_tab_update("victoryxu666@gmail.com", "100347", NETELLER_PAYMENT)
+db_util.email_game_tab_update("victoryxu666@gmail.com", "100347", NETELLER_PAYMENT)
+db_util.get_claim_back_results(10)
 print(db_util.get_send_results(10, NETELLER_PAYMENT, "100050"))
 

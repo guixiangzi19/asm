@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from ui.win_ui import connect_app
 from utils.process_utils import get_process_pid
 from utils.chromeUtile import init_chrome
 from utils.constains import *
@@ -55,6 +54,7 @@ class PaymentBase:
         return self.driver.find_elements(By.CSS_SELECTOR, value)
 
     def chrome_to_top(self):
+        from ui.win_ui import connect_app
         self.chrome_pid = connect_app(self.chrome_pid)
 
     def wait_ele_until(self, value, timeout=30):

@@ -4,6 +4,7 @@ from face.send_data_face import senddataface
 from tkinter.font import Font
 from tkinter.ttk import Separator
 from utils.excel_handler import get_trans_data
+from utils.db import db_util
 
 SendDataDetailsFaceTitile = "Details"
 
@@ -25,7 +26,8 @@ class SendDataDetailsFace():
         self.sddf_title_face = create_title_face(self.send_data_details_face)
         self.sddf_data_face = create_face(self.send_data_details_face)
 
-        trans_list = get_trans_data(self.web_platform)  # 拿数据
+        # trans_list = get_trans_data(self.web_platform)  # 拿数据
+        trans_list = db_util.get_send_results(10, self.web_platform)
 
         self.titile_col(self.sddf_title_face)
         self.data_show_col(self.sddf_data_face, trans_list)

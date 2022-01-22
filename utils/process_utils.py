@@ -23,16 +23,14 @@ def shell(cmd):
     except:
         return ""
 
-def get_process_pid(name="chrome.exe") ->list:
+def get_process_pid(name="chrome.exe") ->set:
     pid_list = set()
     wmi = GetObject("winmgmts:")
     process_code = wmi.ExecQuery(f'select * from Win32_Process where Name="{name}"')
     if process_code and len(process_code) > 0:
         for process_info in process_code:
             pid_list.add(process_info.ProcessId)
-        return pid_list
-    else:
-        return None
+    return pid_list
 
 def kill_process(name=None, pid=None):
     if pid:
