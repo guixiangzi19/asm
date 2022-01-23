@@ -38,25 +38,25 @@ class MenuFace():
         self.home_label = create_desk_menu_label(self.menu_face, name=HOME, photo=self.photo_home1)
 
         self.home_label.bind('<Button-1>', func=self.go_to_home)
-        self.home_label.grid(row=0, column=0, padx=20, pady=26)
+        self.home_label.grid(row=0, column=0)
 
         self.photo_send1 = open_image('image/send01.png', (23, 26))
         self.photo_send2 = open_image('image/send02.png', (23, 26))
         self.send_label = create_desk_menu_label(self.menu_face, name=SEND, photo=self.photo_send1)
         self.send_label.bind('<Button-1>', func=self.go_to_send)
-        self.send_label.grid(row=1, column=0, padx=20, pady=26)
+        self.send_label.grid(row=1, column=0)
 
         self.photo_claimback1 = open_image('image/claimback01.png', (27, 24))
         self.photo_claimback2 = open_image('image/claimback02.png', (27, 24))
         self.claim_back_label = create_desk_menu_label(self.menu_face, name=CMBK, photo=self.photo_claimback1)
         self.claim_back_label.bind('<Button-1>', func=self.go_to_claim_back)
-        self.claim_back_label.grid(row=2, column=0, padx=20, pady=26)
+        self.claim_back_label.grid(row=2, column=0)
 
         self.photo_profile1 = open_image('image/profile01.png', (26, 29))
         self.photo_profile2 = open_image('image/profile02.png', (26, 29))
         self.profile_label = create_desk_menu_label(self.menu_face, name=POFL, photo=self.photo_profile1)
         self.profile_label.bind('<Button-1>', func=self.go_to_profile)
-        self.profile_label.grid(row=3, column=0, padx=25, pady=26)
+        self.profile_label.grid(row=3, column=0)
 
         # homeface.create(self.master)
 

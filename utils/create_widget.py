@@ -1,36 +1,54 @@
 from tkinter import *
 from utils.constains import *
 from PIL import Image, ImageTk
-
+import ctypes
+ctypes.windll.shcore.SetProcessDpiAwareness(1)
+ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+sf=ScaleFactor / 100
 grey1 = '#f0f0f0'
 grey2 = '#e1e1e1'
 spans = "                    "
 
 
 def create_desk_menu_label(master, name=None, photo=None):
-    lab = Label(master, text=name, image=photo, fg='#5F9CCC', font='Sylfaen 10', compound='top', relief='flat',
-                bg=grey2, padx=5, pady=11)
+    w = int(88 * sf)
+    h = int(100 * sf)
+    lab = Label(master, text=name, image=photo, width=f'{w}', height=f'{h}', fg='#5F9CCC', font='Sylfaen 10', compound='top', relief='flat',
+                bg=grey2)
+    lab.tk.call('tk', 'scaling', sf)
     return lab
 
 
 def create_left_face(master, bg='grey1'):
-    face = Frame(master)
+    w=int(88*sf)
+    h=int(522*sf)
+    face = Frame(master,width=f'{w}', height=f'{h}')
     face.config(bg=grey1)
     face.grid(**left_face_location)
+    face.grid_propagate(0)
+    face.tk.call('tk', 'scaling', sf)
     return face
 
 
 def create_right_face(master, bg='grey1'):
-    face = Frame(master)
-    face.config(bg=grey1)
+    w = int(542 * sf)
+    h = int(522 * sf)
+    face = Frame(master, width=f'{w}', height=f'{h}')
+    face.config(bg="green")
     face.grid(**right_face_location)
+    face.grid_propagate(0)
+    face.tk.call('tk', 'scaling', sf)
     return face
 
 
 def create_face(master, bg='grey1'):
-    face = Frame(master)
-    face.config(bg=grey1)
+    w = int(542 * sf)
+    h = int(417 * sf)
+    face = Frame(master, width=f'{w}', height=f'{h}')
+    face.config(bg="green")
     face.grid(**face_location)
+    face.grid_propagate(0)
+    face.tk.call('tk', 'scaling', sf)
     return face
 
 
@@ -63,17 +81,25 @@ def create_zw_face(master,row=0,column=0, bg='green'):
     return face3
 
 
-def create_menu_face(master, bg='green'):
-    face = Frame(master)
-    face.config(bg=grey2)
+def create_menu_face(master, bg='grey1'):
+    w = int(88 * sf)
+    h = int(522 * sf)
+    face = Frame(master, width=f'{w}', height=f'{h}')
+    face.config(bg="green")
     face.grid(**menu_face_location)
+    face.grid_propagate(0)
+    face.tk.call('tk', 'scaling', sf)
     return face
 
 
 def create_title_face(master, bg='green'):
-    face = Frame(master)
-    face.config(bg=grey1)
+    w = int(542 * sf)
+    h = int(105 * sf)
+    face = Frame(master, width=f'{w}', height=f'{h}')
+    face.config(bg="green")
     face.grid(**title_face_location)
+    face.grid_propagate(0)
+    face.tk.call('tk', 'scaling', sf)
     return face
 
 
@@ -99,7 +125,13 @@ def create_face_title_label(master, name, photo=None):
 
 
 def create_profile_face_label(master, name=None, photo=None):
-    lab = Label(master, text=name, image=photo, font='黑体', width='40', height='2', anchor='w', bg=grey2)
+    w = int(20 * sf)
+    h = int(1* sf)
+    lab = Label(master, text=name, image=photo, width=f'{w}', height=f'{h}', fg='#5F9CCC', font='Sylfaen 14',
+                compound='top', relief='flat',
+                bg=grey2)
+    lab.tk.call('tk', 'scaling', sf)
+    # lab = Label(master, text=name, image=photo, font='黑体', width='40', height='2', anchor='w', bg=grey2)
     return lab
 
 

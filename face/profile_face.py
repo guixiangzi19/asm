@@ -24,14 +24,14 @@ class ProfileFace():
         self.exchange_chips = check_settings.get_setting_value("chips", section='usa')
         self.email = check_settings.get_setting_value("email")
 
-        self.profile_face_label01 = create_profile_face_label(self.profile_face, name=f"   {ClubId}:{self.club_id}")
+        self.profile_face_label01 = create_profile_face_label(self.profile_face, name=f"{ClubId}:{self.club_id}")
 
         self.profile_face_label01.grid(row=1, column=2, pady=5)
         self.photo_jt = open_image('image/forward.png', (9, 15))
         self.profile_face_label11 = create_profile_face_btn_label(self.profile_face, photo=self.photo_jt)
         self.profile_face_label11.bind('<Button-1>', func=self.go_to_set_clubid)
         self.profile_face_label11.grid(row=1, column=3, pady=5, sticky=N + W + E + S)
-        create_profile_face_un_label(self.profile_face).grid(row=1, column=1, pady=5, sticky=N + W + E + S)  # 占位用，无意义
+        # create_profile_face_un_label(self.profile_face).grid(row=1, column=1, pady=5, sticky=N + W + E + S)  # 占位用，无意义
 
         self.profile_face_label02 = create_profile_face_label(self.profile_face,
                                                               name=f"  {Exchange}:{self.exchange_money} USD = {self.exchange_chips} Chips")
@@ -46,7 +46,7 @@ class ProfileFace():
         self.profile_face_label13.bind('<Button-1>', func=self.go_to_set_email)
         self.profile_face_label13.grid(row=3, column=3, pady=5, sticky=N + W + E + S)
 
-        Label(self.profile_face, bg=grey1).grid(row=4, column=2, pady=80, padx=5, sticky=W)  # 占位
+        # Label(self.profile_face, bg=grey1).grid(row=4, column=2, pady=80, padx=5, sticky=W)  # 占位
 
     def go_to_set_clubid(self, event):
         self.set_club_id_page = create_settings_top_level(self.profile_face, ClubId)
